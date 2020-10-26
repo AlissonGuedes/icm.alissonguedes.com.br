@@ -1,0 +1,41 @@
+{if is_logged()}
+<aside class="sidenav-main nav-collapsible sidenav-light sidenav-active-square scrollbar
+	{if isset($hide_menu) && $hide_menu === '0' }nav-collapsed{else}nav-lock nav-expanded{endif}">
+
+	<div class="brand-sidebar">
+		<h1 class="logo-wrapper">
+
+			<a class="brand-logo darken-1" href="{base_url}dashboard">
+
+				{if file_exists(base_path() . '/' . configuracoes('logomarca')) }
+				<img class="hide-on-med-and-down" src="{base_path{+ configuracoes logomarca +}}" alt="">
+				{else}
+				<img class="show-on-medium-and-down hide-on-med-and-up" src="{base_path{+ configuracoes logomarca +}}" alt="">
+				{endif}
+
+				<span class="logo-text hide-on-med-and-down">{+ configuracoes title +}</span>
+
+			</a>
+
+			<a class="navbar-toggler" href="javascript:void(0);">
+				<i class="material-icons">
+					{if isset($hide_menu) && $hide_menu === '0' }
+					radio_button_unchecked
+					{else}
+					radio_button_checked
+					{endif}
+				</i>
+			</a>
+
+		</h1>
+
+	</div>
+
+	{sidebar}
+
+	<a href="#" data-target="slide-out" class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only">
+		<i class="material-icons">menu</i>
+	</a>
+
+</aside>
+{endif}

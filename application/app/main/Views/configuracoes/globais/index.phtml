@@ -1,0 +1,110 @@
+<div class="content-wrapper-before"> </div>
+
+<div class="sidebar-left sidebar-fixed">
+	<div class="sidebar">
+		<div class="sidebar-content">
+			<div class="sidebar-header ">
+				<div class="sidebar-details animated fadeIn">
+					<div class="breadcrumbs-dark animated fadeIn" id="breadcrumbs-wrapper">
+						<h5 class="breadcrumbs-title m-0">
+							<span>Site</span>
+						</h5>
+						<ol class="breadcrumbs m-0">
+							<li class="breadcrumb-item">
+								<a href="<?= base_url(); ?>dashboard"><?= __DASHBOARD__; ?></a>
+							</li>
+							<li class="breadcrumb-item">
+								<a href="<?= base_url(); ?>configuracoes"><?= __SETTINGS__; ?></a>
+							</li>
+							<li class="breadcrumb-item">
+								<?= __GLOBALS__ ?>
+							</li>
+						</ol>
+					</div>
+				</div>
+				
+			</div>
+
+			<div id="sidebar-list" class="sidebar-menu list-group position-relative animate fadeLeft">
+				<div class="sidebar-list-padding app-sidebar sidenav" id="app-sidenav">
+					 <ul class="todo-list display-grid tabs tabs-vertical" style="overflow: auto;">
+						<li class="tab">
+							<a href="#site" class="active">
+								<i class="material-icons mr-2">error_outline</i>
+								<?= __SITE__; ?>
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#system">
+								<i class="material-icons mr-1">person_outline</i>
+								<?= __SYSTEM__; ?>
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#server">
+								<i class="material-icons mr-1">storage</i>
+								<?= __SERVER__; ?>
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#filters">
+								<i class="material-icons mr-1">filter_alt</i>
+								<?= __FILTERS__; ?>
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#menus" class="text-sub">
+								<i class="material-icons mr-2"> list </i>
+								<?= __MENUS__; ?>
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#permissions">
+								<i class="material-icons mr-1">star</i>
+								<?= __PERMISSIONS__; ?>
+							</a>
+						</li> 
+					<!--
+						<li class="tab">
+							<a href="#" class="text-sub">
+								<i class="purple-text material-icons small-icons mr-2"> fiber_manual_record </i>
+								API
+							</a>
+						</li>
+						<li class="tab">
+							<a href="#" class="text-sub">
+								<i class="amber-text material-icons small-icons mr-2"> fiber_manual_record </i>
+								Paypal
+							</a>
+						</li>
+						<li class="tab">
+						<a href="#" class="text-sub">
+							<i class="light-green-text material-icons small-icons mr-2">
+								fiber_manual_record</i>
+								Invoice
+							</a>
+						</li>
+					-->
+					</ul>
+
+				</div>
+
+			</div>
+
+			<a href="#" data-target="app-sidenav" class="sidenav-trigger hide-on-large-only" style="">
+				<i class="material-icons">menu</i>
+			</a>
+
+		</div>
+
+	</div>
+
+</div>
+
+<!-- BEGIN pag-home -->
+<div class="app-todo animate fadeRight">
+
+	<?php require 'formulario.phtml'; ?>
+
+</div>
+<!-- END pag-home -->

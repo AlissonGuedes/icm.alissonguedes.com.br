@@ -1,0 +1,216 @@
+<!-- BEGIN pag-home -->
+<div id="pag-home">
+
+	<!-- BEGIN content -->
+	<div class="content">
+
+		<div class="container">
+
+			<div class="row">
+
+				<div id="login-page" class="col">
+
+					<div class="col s12 m6 l4 xl3 z-depth-4 card-panel border-radius-6 login-card bg-opacity-8 animate fadeUp">
+
+						<h3 class="flow-text center-align mb-10">Lista de Oração Ininterrupta <br> <small>ICM - Geisel</small></h3>
+
+						<div class="card-content">
+
+							<!-- BEGIN form -->
+							<form novalidate action="<?= base_url(); ?>" method="post" autocomplete="off">
+
+								<div class="row">
+									<!-- BEGIN Input[Nome] -->
+									<div class="col s12">
+										<div class="input-field">
+											<!-- <i class="material-icons prefix">person</i> -->
+											<input type="text" name="nome" id="nome" value="" autofocus="autofocus">
+											<label for="title"> Nome completo </label>
+										</div>
+									</div>
+									<!-- END Input[Nome] -->
+								</div>
+
+								<div class="row">
+									<!-- BEGIN Input[Nome] -->
+									<div class="col s12">
+										<div class="input-field">
+											<label class="active" for="igreja"> Igreja </label>
+											<select class="select" name="igreja">
+												<option value="" selected="selected" disabled="disabled"> Informe a igreja </option>
+
+												<?php foreach($igrejas as $igreja) : ?>
+
+												<option value="<?= $igreja -> id; ?>"> <?= $igreja -> igreja; ?> </option>
+												<?php endforeach; ?>
+												<!-- <option value="geisel-1"> Geisel I </option>
+										<option value="geisel-2">Geisel II </option> -->
+											</select>
+										</div>
+									</div>
+									<!-- END Input[Robots] -->
+								</div>
+
+								<div class="row">
+									<!-- BEGIN Input[Nome] -->
+									<div class="col s12">
+										<div id="horario" class="input-field">
+											<label class="active" for="horario"> Horário </label>
+											<select class="select" name="horario">
+												<option value="" selected="selected" disabled="disabled"> Informe o horário </option>
+												<?php foreach( $horario as $h ) : ?>
+												<?php $listaModel = new \App\Models\ListaModel(); ?>
+												<?php $isset = $listaModel -> getMembroHorario($h -> horario) -> get() -> getRow(); print_r($isset);?>
+												<option value="<?= $h -> horario; ?>" <?= isset($isset) ? 'disabled="disabled"' : null; ?>><?= $h -> horario; ?><?= isset($isset) ? ' (horário não disponível)' : null; ?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+									</div>
+									<!-- END Input[Robots] -->
+								</div>
+
+								<div class="row">
+
+									<div class="col s12">
+										<button type="submit" class="btn waves-effect right">
+											<i class="material-icons left">save</i>
+											<?= __SAVE__; ?>
+										</button>
+									</div>
+
+									<input type="hidden" name="id" value="">
+									<input type="hidden" name="_method" value="post">
+
+								</div>
+
+							</form>
+
+
+							<div class="row">
+
+								<div class="col s12">
+
+									<div class="mt-5"></div>
+									<a href="#horarios" class="blue-text waves-effect left modal-trigger">Horários disponíveis</a>
+									<a href="#lista" class="blue-text waves-effect right modal-trigger">Lista completa</a>
+
+								</div>
+
+							</div>
+
+						</div>
+						<!-- END card-content -->
+
+					</div>
+					<!-- END card -->
+
+				</div>
+				<!-- END content-area -->
+
+			</div>
+
+		</div>
+		<!-- END form-body -->
+
+	</div>
+	<!-- END content -->
+
+</div>
+<!-- END pag-home -->
+
+<style>
+table {
+	font-family: 'Roboto';
+}
+
+.dropdown-content.select-dropdown {
+	max-height: 300px;
+}
+
+</style>
+
+<div id="lista" class="modal">
+	<div class="modal-content">
+
+		<div class="modal-header">
+
+			<h4>Lista Completa</h4>
+
+		</div>
+
+		<div class="modal-body scroller" style="height: 320px; overflow: auto;">
+
+			<table class="bordered striped">
+
+
+				<thead>
+					<tr>
+						<th class="center-align" width="25%">Horário</th>
+						<th class="center-align" width="25%">Nome</th>
+						<th class="center-align" width="25%">Igreja</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<?php if ( isset($membros) ) : ?>
+					<?php foreach($membros as $m) : ?>
+					<tr>
+						<td class="center-align"><?= $m -> horario?></td>
+						<td class="center-align"><?= $m -> nome?></td>
+						<td class="center-align"><?= $m -> igreja?></td>
+					</tr>
+					<?php endforeach; ?>
+					<?php endif; ?>
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+
+	<div class="modal-footer">
+		<a href="#" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+	</div>
+</div>
+
+
+<div id="horarios" class="modal">
+
+	<div class="modal-content">
+
+		<div class="modal-header">
+
+			<h4>Horários disponíveis</h4>
+
+		</div>
+
+		<div class="modal-body scroller" style="height: 320px; overflow: auto;">
+
+			<table class="bordered striped">
+
+				<thead>
+					<tr>
+						<th class="left-align" width="25%">Horário</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<?php if ( isset($horarios) ) : ?>
+					<?php foreach($horarios as $h) : ?>
+					<tr>
+						<td class="left-align"><?= $h -> horario?> <a href="javascript:void(0);" id="<?= $h -> horario; ?>" class="bt_selecionar ml-3">Selecionar</a></td>
+					</tr>
+					<?php endforeach; ?>
+					<?php endif; ?>
+				</tbody>
+
+			</table>
+
+		</div>
+
+	</div>
+	<div class="modal-footer fixed">
+		<a href="#" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+	</div>
+</div>

@@ -1,0 +1,376 @@
+<div class="content-area content-right">
+
+	<div class="app-wrapper">
+
+		<div id="site" class="card card card-default scrollspy border-radius-6 fixed-width z-depth-1">
+
+			<!-- BEGIN form -->
+			<form novalidate action="<?= base_url(); ?>configuracoes" method="post" autocomplete="off">
+
+				<!-- BEGIN panel -->
+				<div class="panel">
+
+					<!-- BEGIN panel-content -->
+					<div class="panel-content">
+
+						<!-- BEGIN panel-header -->
+						<div class="panel-header">
+
+							<!-- BEGIN toolbar -->
+							<div class="toolbar">
+
+								<!-- Header Icons Starts -->
+								<div class="">
+
+									<ul class="tabs form-tabs">
+										<li class="tab">
+											<a href="#seo" class="active">
+												<i class="material-icons mr-2">info</i> <?= __INFORMATIONS__; ?>
+											</a>
+										</li>
+										<li class="tab">
+											<a href="#security">
+												<i class="material-icons mr-1">security</i> <?= __SECURITY__; ?>
+											</a>
+										</li>
+										<li class="tab">
+											<a href="#messages">
+												<i class="material-icons mr-1">message</i> <?= __SITE_MESSAGES__; ?>
+											</a>
+										</li>
+									</ul>
+
+								</div>
+								<!-- Header Icons Ends -->
+
+							</div>
+							<!-- END toolbar -->
+
+						</div>
+						<!-- END panel-header -->
+
+						<!-- BEGIN panel-body -->
+						<div class="panel-body no-padding">
+
+							<!-- BEGIN #account -->
+							<div id="seo">
+
+								<!-- BEGIN form-body -->
+								<div class="form-body">
+
+									<div class="row">
+
+										<div class="col s12 l8 offset-l2">
+
+											<div class="row">
+
+												<!-- BEGIN Input[Nome] -->
+												<div class="col s12">
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">person</i> -->
+														<input type="text" name="title" id="title" value="<?= configuracoes('title'); ?>" id="title" autofocus="autofocus">
+														<label for="title"><?= __SITE_NAME__; ?></label>
+													</div>
+												</div>
+												<!-- END Input[Nome] -->
+
+											</div>
+
+											<div class="row">
+
+												<!-- BEGIN Input[Nome] -->
+												<div class="col s12">
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">person</i> -->
+														<input type="url" name="url" id="url" value="<?= configuracoes('url'); ?>" id="url">
+														<label for="url"><?= __SITE_URL__; ?></label>
+													</div>
+												</div>
+												<!-- END Input[Nome] -->
+
+											</div>
+
+											<div class="row">
+
+												<!-- BEGIN Input[Login] -->
+												<div class="col s12">
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">account_circle</i> -->
+														<textarea name="description" class="materialize-textarea" id="descricao" style="min-height: 80px;"><?= configuracoes('description'); ?></textarea>
+														<label for="login"><?= __SITE_DESCRIPTION__; ?></label>
+													</div>
+												</div>
+												<!-- END Input[Login] -->
+
+											</div>
+
+											<div class="row">
+
+												<!-- BEGIN Input[Tags do Site] -->
+												<div class="col s12">
+
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">person</i> -->
+														<div class="tags" data-name="keywords[]" data-limit="10" placeholder="<?= __SITE_TAGS__; ?>" data-value="<?= configuracoes('keywords'); ?>">
+															<input class="custom-class">
+														</div>
+													</div>
+
+												</div>
+												<!-- END Input[Tags do Site] -->
+
+											</div>
+
+											<div class="row">
+
+												<!-- BEGIN Input[Nome] -->
+												<div class="col s12">
+													<div class="input-field">
+														<label class="active" for="robots"><?= __SEARCH_ROBOTS__; ?></label>
+														<select class="select" name="robots">
+															<option value="index,follow">index, follow</option>
+															<option value="noindex,follow">noindex, follow</option>
+															<option value="index,nofollow">index, nofollow</option>
+															<option value="noindex,nofollow">noindex, nofollow</option>
+														</select>
+													</div>
+												</div>
+												<!-- END Input[Robots] -->
+
+											</div>
+
+										</div>
+
+									</div>
+
+								</div>
+								<!-- END form-body -->
+
+							</div>
+							<!-- END #account -->
+
+							<!-- BEGIN #security -->
+							<div id="security">
+
+								<!-- BEGIN form-body -->
+								<div class="form-body">
+
+									<div class="row">
+
+										<div class="col s12 l8 offset-l2">
+
+											<div class="label-buttons">
+
+												<div class="row">
+
+													<div class="col s6 mb-3">
+
+														<label class="">
+															<input type="checkbox" name="force_https" id="force_https" value="1" <?= configuracoes('force_https') === '1' ? 'checked="checked"' : null; ?>>
+															<i class="material-icons">vpn_lock</i>
+															<span><?= __WITH_HTTPS__; ?></span>
+															<small><?= __LABEL_CONFIG_HTTPS_DESCRIPTION__; ?></small>
+														</label>
+
+													</div>
+
+													<!-- BEGIN Input[Email] -->
+													<div class="col s6 mb-3">
+
+														<label class="">
+															<input type="checkbox" name="force_www" id="force_www" value="1" <?= configuracoes('force_www') === '1' ? 'checked="checked"' : null; ?>>
+															<i class="material-icons">lock</i>
+															<span><?= __REDIRECT_WWW__; ?></span>
+															<small><?= __LABEL_CONFIG_WWW_DESCRIPTION__; ?></small>
+														</label>
+
+													</div>
+													<!-- END Input[Email] -->
+
+													<!-- BEGIN Input[Senha] -->
+													<div class="col s6 mb-3">
+
+														<label class="">
+															<input type="checkbox" name="manutencao" id="manutencao" value="1" <?= configuracoes('manutencao') === '1' ? 'checked="checked"' : null; ?>>
+															<i class="material-icons">power_off</i>
+															<span><?= __SITE_UNDER_MAINTENANCE__; ?></span>
+															<small><?= __LABEL_CONFIG_MAINTENANCE_DESCRIPTION__; ?></small>
+														</label>
+
+													</div>
+													<!-- END Input[Senha] -->
+
+													<!-- BEGIN Input[Senha] -->
+													<div class="col s6 mb-3">
+
+														<label class="" data-tooltip="Favorito">
+															<input type="checkbox" name="bloqueado" id="bloqueado" value="1" <?=configuracoes('bloqueado') === '1' ? 'checked="checked"' : null; ?>>
+															<i class="material-icons">block</i>
+															<span><?= __SITE_BLOCKED__; ?></span>
+															<small><?= __LABEL_CONFIG_BLOCKED_DESCRIPTION__; ?></small>
+														</label>
+
+													</div>
+													<!-- END Input[Senha] -->
+
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+
+								</div>
+								<!-- END form-body -->
+
+							</div>
+							<!-- END #security -->
+
+							<!-- BEGIN #messages -->
+							<div id="messages">
+
+								<!-- BEGIN form-body -->
+								<div class="form-body">
+
+									<div class="row">
+
+										<div class="col s12 l8 offset-l2">
+
+											<div class="row">
+
+												<!-- BEGIN Input[Login] -->
+												<div class="col s12 mb-2">
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">account_circle</i> -->
+														<label class="active"><?= __SITE_UNDER_MAINTENANCE__; ?></label><br>
+														<div class="editor--basic msg_manutencao" data-placeholder="<?= __SITE_UNDER_MAINTENANCE__; ?>"><?= configuracoes('msg_manutencao'); ?></div>
+														<input type="hidden" name="msg_manutencao" id="msg_manutencao">
+													</div>
+												</div>
+												<!-- END Input[Login] -->
+
+											</div>
+
+											<div class="row">
+
+												<!-- BEGIN Input[Login] -->
+												<div class="col s12">
+													<div class="input-field">
+														<!-- <i class="material-icons prefix">account_circle</i> -->
+														<label class="active"><?= __SITE_BLOCKED__; ?></label><br>
+														<div class="editor--basic msg_suspensao" data-placeholder="<?= __SITE_BLOCKED__; ?>"><?= configuracoes('msg_suspensao'); ?></div>
+														<input type="hidden" name="msg_suspensao" id="msg_suspensao">
+													</div>
+												</div>
+												<!-- END Input[Login] -->
+
+											</div>
+
+										</div>
+
+									</div>
+
+								</div>
+								<!-- END form-body -->
+
+							</div>
+							<!-- END #messages -->
+
+						</div>
+						<!-- END panel-body -->
+
+					</div>
+					<!-- END panel-content -->
+
+					<!-- BEGIN panel-footer -->
+					<div class="panel-footer">
+
+						<div class="row">
+
+							<div class="col s12">
+								<button type="submit" class="btn waves-effect right">
+									<i class="material-icons left">save</i>
+									<?= __SAVE_CHANGES__; ?>
+								</button>
+							</div>
+
+							<input type="hidden" name="id" value="<?= configuracoes('id'); ?>">
+							<input type="hidden" name="_method" value="put">
+
+						</div>
+
+					</div>
+					<!-- END panel-footer -->
+
+				</div>
+				<!-- END panel -->
+
+			</form>
+			<!-- END form -->
+
+		</div>
+
+		<div id="system">
+
+
+			<div class="row">
+
+				<!-- BEGIN Input[Nome] -->
+				<div class="col s12 l6">
+					<div class="input-field">
+						<!-- <i class="material-icons prefix">person</i> -->
+						<label class="active" for="author"><?= __DEVELOPER__; ?></label>
+						<div name="author" style="padding: 0.7rem 0;">
+							< ?=configuracoes('author'); ?>
+						</div>
+					</div>
+				</div>
+				<!-- END Input[Nome] -->
+
+				<!-- BEGIN Input[Nome] -->
+				<div class="col s12 l6">
+					<div class="input-field">
+						<!-- <i class="material-icons prefix">person</i> -->
+						<label class="active" for="nome"><?= __DEVELOPER_WEBSITE__; ?></label>
+						<div name="developer_website" style="padding: 0.7rem 0;">
+							<a href="< ?= configuracoes('developer_website'); ?>" target="_blank">
+								< ?=configuracoes('developer_website'); ?>
+							</a>
+						</div>
+					</div>
+				</div>
+				<!-- END Input[Nome] -->
+
+			</div>
+
+
+		</div>
+
+		<div id="server">
+
+			server
+
+		</div>
+
+		<div id="filters">
+
+			filters
+
+		</div>
+
+		<div id="menus">
+
+			menus
+
+		</div>
+
+		<div id="permissions">
+
+			permissions
+
+		</div>
+
+	</div>
+
+</div>

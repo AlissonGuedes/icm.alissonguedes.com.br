@@ -1,0 +1,131 @@
+<!-- BEGIN pag-home -->
+<div id="pag-home">
+
+    <!-- BEGIN header -->
+    <div class="header">
+
+    </div>
+    <!-- END header -->
+
+    <!-- BEGIN content -->
+    <div class="content">
+
+        <div class="row">
+
+            <div class="col s12">
+
+                <div class="container">
+
+                    <div id="login-page" class="row">
+
+                        <div
+                            class="col s12 m6 l4 xl3 z-depth-4 card-panel border-radius-6 login-card bg-opacity-8 animate fadeUp">
+
+                            <div class="row">
+                                <div class="input-field col s12 center-align">
+                                    <button type="button" id="btn-back"
+                                        class="btn btn-floating left transparent z-depth-0">
+                                        <i class="material-icons grey-text text-darken-4">keyboard_arrow_left</i>
+                                    </button>
+
+                                    <p>
+                                        {__ADMIN_AREA__}
+                                    </p>
+
+                                    <h5>{site_title}</h5>
+
+                                </div>
+                            </div>
+
+                            <form novalidate id="frm-login" class="login-form" action="{+ basesite url +}login"
+                                method="post" enctype="multipart/form-data" autocomplete="off">
+
+                                <div class="form">
+
+                                    <div id="input-login" class="slow">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="input-field">
+                                                    <i class="material-icons prefix">person</i>
+                                                    <input type="email" name="login" id="login" autofocus="autofocus">
+                                                    <label for="login">
+                                                        {__USERNAME__}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col s12">
+                                                <button type="button" id="relembrar_login" name="relembrar_login"
+                                                    class="btn btn-flat pl-0 pr-0 transparent left">
+                                                    {__RETRIEVE_LOGIN__}
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div id="input-pass" class="slow">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="input-field">
+                                                    <i class="material-icons prefix">lock</i>
+                                                    <input type="password" name="senha" id="senha" disabled="disabled"
+                                                        autofocus="autofocus" minlength="5">
+                                                    <label for="pass">
+                                                        {__PASSWORD__}
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col s12">
+                                                <button type="button" id="relembrar_senha" name="relembrar_senha"
+                                                    class="btn btn-flat pl-0 pr-0 transparent right">
+                                                    {__RETRIEVE_PASSWORD__}
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12">
+
+                                        <button type="submit" id="entrar" name="entrar"
+                                            class="btn btn-large waves-effect border-round waves-light gradient-45deg-indigo-purple col right next">
+                                            {__NEXT__}
+                                            <i class="material-icons margin-left">input</i>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="acao" value="login">
+                                <input type="hidden" name="_method" value="{method}">
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END content -->
+
+</div>
+<!-- END pag-home -->
+
+<script>
+    setTimeout(function () {
+        window.history.pushState(null, null, "login");
+        document.getElementById('login').focus();
+    })
+</script>

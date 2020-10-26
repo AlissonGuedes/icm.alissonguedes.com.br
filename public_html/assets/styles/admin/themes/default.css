@@ -1,0 +1,89 @@
+.theme-default .page-topbar .navbar-color {
+    background: #f5f5f5 !important;
+}
+
+.theme-default .page-topbar .navbar-color a {
+    color: rgba(0, 0, 0, .58);
+}
+
+#main>.container {
+    overflow: hidden !important;
+}
+
+#main .content-wrapper-before {
+    background: -webkit-linear-gradient(45deg, #303f9f, #7b1fa2);
+    background: linear-gradient(45deg, #303f9f, #7b1fa2);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 0 45%;
+    position: absolute;
+    height: 85px !important;
+    left: 0;
+    right: 0;
+    top: 64px;
+    bottom: 0;
+}
+
+[type=checkbox]:checked~i,
+[type=radio]:checked~i,
+[type=checkbox]:checked~span,
+[type=radio]:checked~span {
+    color: var(--amber);
+}
+
+
+/** Sidenav **/
+
+.sidenav {
+    /* padding-top: 15px; */
+}
+
+.sidenav li ul {
+    overflow: hidden;
+    position: relative;
+}
+
+.sidenav li.active li:before,
+.sidenav li li:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    left: 30px;
+    right: auto;
+    bottom: auto;
+    margin-top: 18px;
+    border-radius: 50%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, .5);
+    z-index: 2;
+}
+
+.sidenav li.active li.active:before {
+    border-color: rgba(255, 255, 255, 1);
+}
+
+body.loading:before {
+    content: '';
+    position: fixed;
+    background: rgba(0, 0, 0, 0.32);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+body.loading:after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: -webkit-linear-gradient(45deg, #303f9f, #7b1fa2);
+    z-index: 99999;
+    -webkit-animation: indeterminate 3.1s cubic-bezier(.65, .815, .735, .395) infinite;
+    animation: indeterminate 3.1s cubic-bezier(.65, .815, .735, .395) infinite;
+}
