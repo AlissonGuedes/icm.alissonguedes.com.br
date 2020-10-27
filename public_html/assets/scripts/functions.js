@@ -11,17 +11,17 @@ function resizeble() {
 
 function resizeBody() {
 
-    var alturaBody = $('body').height();
+    // var alturaBody = $('body').height();
 
-    var alturaTotal = alturaBody - 420;
+    // var alturaTotal = alturaBody - 420;
 
-    setTimeout(() => {
-        $('.dataTables_wrapper.no-footer .dataTables_scrollBody').css({
-            'height': alturaTotal + 'px',
-            'min-height': alturaTotal + 'px',
-            'max-height': alturaTotal + 'px',
-        });
-    }, 0);
+    // setTimeout(() => {
+    //     $('.dataTables_wrapper.no-footer .dataTables_scrollBody').css({
+    //         'height': alturaTotal + 'px',
+    //         'min-height': alturaTotal + 'px',
+    //         'max-height': alturaTotal + 'px',
+    //     });
+    // }, 0);
 
 }
 
@@ -39,54 +39,57 @@ function animate(component, animation, callback) {
 
 };
 
-function quillEditor() {
+function editor() {
 
-    // Editor básico com apenas formatação de fontes [Bold, Underline, Italic e Strike]
-    if ($('.editor--basic').length > 0) {
-        $('.editor--basic').each(function() {
-            new Quill(this, {
-                bounds: this,
-                modules: {
-                    formula: !0,
-                    syntax: !0,
-                    toolbar: [
-                        [{ font: [] }, { size: [] }],
-                        [{ align: [] }],
-                        ["bold", "italic", "underline", "strike"],
-                        ["link", "image", "video"],
-                    ]
-                },
-                placeholder: $(this).attr('data-placeholder'),
-                theme: "snow"
-            });
-        });
-    }
+    // // Editor sem barra de ferramentas
+    // $('.editor--hide_toolbar').each(function(e){
 
-    // Editor completo
-    if ($('.editor--full').length > 0) {
-        $('.editor--full').each(function() {
-            new Quill(this, {
-                bounds: this,
-                modules: {
-                    formula: !0,
-                    syntax: !0,
-                    toolbar: [
-                        [{ font: [] }, { size: [] }],
-                        ["bold", "italic", "underline", "strike"],
-                        [{ color: [] }, { background: [] }],
-                        [{ script: "super" }, { script: "sub" }],
-                        [{ header: "1" }, { header: "2" }, "blockquote", "code-block"],
-                        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-                        ["direction", { align: [] }],
-                        ["link", "image", "video", "formula"],
-                        ["clean"]
-                    ]
-                },
-                placeholder: $(this).attr('data-placeholder'),
-                theme: "snow"
-            });
+    //     tinymce.init({
+    //         selector: '.' + $(this).attr('class').replace(/\s/g, '.'),
+    //         height: typeof $(this).data('height') !== 'undefined' ? $(this).data('height') : 250,
+    //         plugins: [],
+    //         toolbar: false,
+    //         menubar: false,
+    //         inline: false,
+    //         placeholder: typeof $(this).attr('placeholder') !== 'undefined' ? $(this).attr('placeholder') : null,
+    //         content_css: typeof $(this).data('style') !== 'undefined' ? $(this).data('style') : BASE_PATH + 'styles/style.css',
+    //     });
+
+    // });
+
+    // // Editor básico
+    $('.basic--editor').each(function() {
+
+        var editor = new Quill(this, {
+            placeholder: typeof $(this).attr('placeholder') !== 'undefined' ? $(this).attr('placeholder') : null,
+            theme: 'snow'
         });
-    }
+
+    });
+
+
+    // // Editor completo
+    // $('.full--editor').each(function(){
+    //     tinymce.init({
+    //         selector: '.' + $(this).attr('class').replace(/\s/g, '.'),
+    //         height: typeof $(this).data('height') !== 'undefined' ? $(this).data('height') : 250,
+    //         menubar: true,
+    //         plugins: [
+    //             'quickbars advlist autolink link image lists charmap print preview hr anchor pagebreak',
+    //             'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+    //             'table emoticons template paste help'
+    //         ],
+    //         toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+    //             'bullist numlist outdent indent | link | print preview media fullpage | ' +
+    //             'forecolor backcolor emoticons | help',
+    //         menu: {
+    //             favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+    //         },
+    //         menubar: 'favs file edit view insert format tools table help',
+    //         content_css: typeof $(this).data('style') !== 'undefined' ? $(this).data('style') : BASE_PATH + 'styles/style.css',
+    //         placeholder: typeof $(this).attr('placeholder') !== 'undefined' ? $(this).attr('placeholder') : null
+    //     });
+    // });
 
 }
 
@@ -94,4 +97,4 @@ $(window).on('resize', function(e) {
 
     resizeBody();
 
-})
+});

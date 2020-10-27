@@ -23,7 +23,8 @@ var Request = {
 
                 if (target && target != '_self') {
                     window.open(link, target);
-                } else if (target && target == '_self') {
+                } else
+                if (target && target == '_self') {
                     window.location.href = link;
                 }
 

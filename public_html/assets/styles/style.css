@@ -1,3 +1,9 @@
+*,
+ :after,
+ :before {
+    box-sizing: content-box;
+}
+
 .container {
     width: 100%;
     max-width: 100%!important;
@@ -46,6 +52,17 @@
 
 .btn.transparent i {
     color: inherit;
+}
+
+.dropdown-actions {
+    position: relative;
+}
+
+.dropdown-content {
+    width: inherit !important;
+    /* left: 0 !important; */
+    /* top: 0px !important; */
+    /* height: auto !important; */
 }
 
 [type=radio].tabbed:focus+span:before {
@@ -312,6 +329,7 @@ input[type=checkbox]:not(:disabled)~.lever:active:before {
     font-weight: 600
 }
 
+strong,
 .bolder {
     font-weight: 900 !important;
 }
@@ -330,10 +348,6 @@ input[type=checkbox]:not(:disabled)~.lever:active:before {
 
 small {
     font-size: .8rem
-}
-
-strong {
-    font-weight: 500
 }
 
 .light {
@@ -362,6 +376,16 @@ p.title {
 
 p.header {
     font-size: 1rem
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family: 'Roboto';
 }
 
 select {
@@ -461,6 +485,16 @@ select {
 
 .font-weight-900 {
     font-weight: 900!important
+}
+
+.text-overflow {
+    position: relative;
+    overflow: hidden;
+    height: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 
 .position-absolute {
@@ -620,6 +654,7 @@ nav ul a {
     right: initial;
     pointer-events: none;
     line-height: 1;
+    color: rgba(0, 0, 0, 0.3);
 }
 
 .input-field>label.active {
@@ -657,8 +692,9 @@ input[type=datetime-local]:not(.browser-default),
 input[type=tel]:not(.browser-default),
 input[type=number]:not(.browser-default),
 input[type=search]:not(.browser-default),
+textarea,
 textarea.materialize-textarea {
-    font-family: Roboto, sans-serif;
+    font-family: 'Roboto' !important;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     font-size: 1rem;
@@ -668,18 +704,36 @@ textarea.materialize-textarea {
     text-transform: inherit;
     align-self: flex-end;
     box-sizing: border-box;
-    /* width: 100%; */
     height: 3rem;
-    /* margin: 0 0 0 0; */
     margin-bottom: 0;
+}
+
+input:not([type]),
+input[type=text]:not(.browser-default),
+input[type=password]:not(.browser-default),
+input[type=email]:not(.browser-default),
+input[type=url]:not(.browser-default),
+input[type=time]:not(.browser-default),
+input[type=date]:not(.browser-default),
+input[type=datetime]:not(.browser-default),
+input[type=datetime-local]:not(.browser-default),
+input[type=tel]:not(.browser-default),
+input[type=number]:not(.browser-default),
+input[type=search]:not(.browser-default),
+textarea,
+textarea.materialize-textarea,
+.chips {
     background-color: rgba(0, 0, 0, 0);
-    background-position: center bottom, center calc(100% - 0px);
+    background-position: center calc(100% - 0px);
     background-repeat: no-repeat;
     background-size: 0 2px, 100% 1px;
-    transition: background 0s ease-out 0s;
     background-image: linear-gradient(#d9d9d9, #d9d9d9), linear-gradient(#d9d9d9, #d9d9d9);
-    border-bottom-color: transparent;
+    border: 0 !important;
     border-radius: 0;
+}
+
+.chips input {
+    background: none !important;
 }
 
 input:not([type]):focus:not([readonly]),
@@ -697,14 +751,11 @@ input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]),
 .select-wrapper input.select-dropdown:focus,
 .chips.focus {
-    -webkit-box-shadow: none !important;
     box-shadow: none !important;
     background-image: linear-gradient(#009efb, #009efb), linear-gradient(#d9d9d9, #d9d9d9);
-    border-bottom-color: transparent;
-    border-radius: 0;
-    background-size: 100% 2px, 100% 0px;
+    background-size: 100% 2px, 100% 1px;
     outline: 0 none;
-    transition-duration: 180ms;
+    transition: background ease-in-out 200ms;
 }
 
 input:not([type]):disabled,
@@ -736,7 +787,7 @@ textarea.materialize-textarea[readonly="readonly"] {
     color: rgba(0, 0, 0, 0.42);
     border-bottom: none;
     background-color: rgba(0, 0, 0, 0);
-    background-position: center bottom, center calc(100% - 1px);
+    background-position: center bottom, center calc(100% - 0px);
     background-repeat: repeat-x;
     background-image: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0, rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 1px), repeating-linear-gradient(to right, #fff 0, #fff 1px, rgba(0, 0, 0, 0.2) 1px, rgba(0, 0, 0, 0.2) 3px)
 }
@@ -755,7 +806,7 @@ input[type=number]:not(.browser-default):focus:not([readonly])+label,
 input[type=search]:not(.browser-default):focus:not([readonly])+label,
 textarea.materialize-textarea:focus:not([readonly])+label,
 .input-field label.active {
-    color: #42a5f5;
+    color: inherit;
 }
 
 input:not([type]):disabled+label,
@@ -803,19 +854,14 @@ textarea.materialize-textarea[readonly="readonly"]+label {
     padding-right: 30px !important;
 }
 
-.chips {
-    background-color: rgba(0, 0, 0, 0);
-    background-position: center bottom, center calc(100% - 1px);
-    background-repeat: no-repeat;
-    background-size: 0 2px, 100% 1px;
-    transition: background 0s ease-out 0s;
-    background-image: linear-gradient(#d9d9d9, #d9d9d9), linear-gradient(#d9d9d9, #d9d9d9);
-    border-bottom-color: transparent;
-    border-radius: 0;
+.input-field input[type=search]:focus:not(.browser-default) {
+    background-color: transparent;
 }
 
-.chips input {
-    background: none !important;
+input.no-border,
+.no-border {
+    background-image: none !important;
+    border: none !important;
 }
 
 .input-field .prefix.active {
@@ -833,7 +879,7 @@ textarea.materialize-textarea[readonly="readonly"]+label {
 .input-field .error {
     position: relative;
     left: 0;
-    width: 100%;
+    width: auto;
     font-size: 13px;
     color: #b00020 !important;
     font-weight: 400;
@@ -859,32 +905,49 @@ textarea.materialize-textarea[readonly="readonly"]+label {
     color: #b00020 !important;
 }
 
-.input-field .error~input {
-    background-color: pink;
-}
-
 .input-field.outlined {
     background: transparent;
+    border-color: #9e9e9e;
     border-radius: 28px !important;
     margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .input-field.outlined input {
-    border-radius: inherit;
     padding: 24px;
+    color: #9e9e9e;
     border-width: 1px;
     border-style: solid;
-    border-color: #9e9e9e;
-    color: #9e9e9e;
-    border-radius: inherit !important;
+    border-radius: inherit;
+    border-color: inherit !important;
     background: none !important;
-    border-bottom-color: inherit !important;
     box-shadow: none !important;
+    margin: 0;
+    /* display: flex; */
+    flex: 1;
 }
 
+.input-field.outlined .prefix {
+    left: 15px;
+    display: flex;
+    align-items: center;
+    height: 3rem;
+}
+
+.input-field.outlined .prefix~input {
+    padding-left: 50px;
+    z-index: 1;
+}
+
+.input-field.outlined input[type=search]:focus:not(.browser-default),
 .input-field.outlined input:focus {
-    /* border-color: #009efb; */
     border-bottom-color: #009efb;
+    color: #444;
+    border: 1px solid;
+    background-color: #fff;
+    box-shadow: none;
 }
 
 .input-field input.blue,
@@ -899,7 +962,8 @@ textarea.materialize-textarea[readonly="readonly"]+label {
 .input-field textarea.purple,
 .input-field textarea.red,
 .input-field textarea.grey {
-    padding: 0 20px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 input:invalid {
@@ -1297,6 +1361,7 @@ table tbody tr td,
 table tbody tr th {
     border: inherit;
     border-radius: 0;
+    cursor: pointer;
 }
 
 table.dataTable tbody tr:last-child {
@@ -1325,6 +1390,20 @@ table tr th:first-child {
     padding-top: 1.27rem;
     padding-left: 1.27rem;
     position: absolute;
+}
+
+.dataTables_wrapper .dataTables_processing {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    margin-left: 0;
+    margin-top: 0;
+    padding-top: 0px;
+    text-align: center;
+    font-size: 1.2em;
+    background: none;
 }
 
 .dataTables_scroll {
@@ -1356,6 +1435,10 @@ table.dataTable.no-footer {
     max-height: 500px; */
 }
 
+table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.032) !important;
+}
+
 table.permissoes tr td,
 table.permissoes tr th {
     display: table-cell;
@@ -1366,8 +1449,8 @@ table.permissoes tr th {
 
 table.datatable th:first-child,
 table.datatable td:first-child {
-    width: 1px !important;
-    padding-left: 22px;
+    /* width: 1px !important;
+    padding-left: 22px; */
 }
 
 table.datatable th:first-child,
@@ -1492,7 +1575,6 @@ table.dataTable tr.blocked {
     z-index: 99999;
     left: 0;
     margin: 0;
-    display: none;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 0;
 }
@@ -1567,14 +1649,87 @@ table.dataTable tr.blocked {
 
 /** Quill **/
 
-.ql-toolbar.ql-snow+.ql-container.ql-snow {
-    border-top: 0px;
-    height: 150px;
+.editor {
+    width: inherit;
+    min-height: 150px;
+}
+
+.editor::before {
+    content: attr(data-placeholder);
+    padding: 13px 20px;
+    display: block;
+    font-family: 'Roboto';
+    font-size: 1rem;
+    color: #585858;
+}
+
+.editor.ql-container::before {
+    content: '';
+    padding: 0;
+    display: none;
+}
+
+.ql-container {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 2;
+    height: auto !important;
+    outline: none;
+    overflow-y: visible;
+    padding: inherit;
+    tab-size: auto;
+    -moz-tab-size: auto;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 0px 5px;
+    font-family: 'Roboto' !important;
+    color: #333;
+}
+
+.ql-editor.ql-blank::before {
+    color: rgba(0, 0, 0, 0.6);
+    content: attr('data-placeholder');
+    font-style: normal;
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    padding: 0px 20px;
+    font-size: 1rem;
+}
+
+.ql-bubble .ql-tooltip-editor input[type=text] {
+    background-image: none !important;
+    box-shadow: none !important;
+    background-size: none !important;
+    outline: 0 none;
+    transition-duration: 120ms;
+}
+
+.ql-editor * {
+    font-family: inherit;
+    color: inherit;
 }
 
 .ql-editor {
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 13px 20px;
+    font-size: 1rem;
+}
+
+.ql-editor.ql-blank::before {
+    font-style: normal;
+}
+
+.ql-toolbar.ql-snow+.ql-container.ql-snow {
+    border-top: 0px;
+    /* height: 150px; */
 }
 
 @media only screen and (min-width: 993px) {
@@ -1823,4 +1978,14 @@ table.dataTable tr.blocked {
     .center-align-xl {
         text-align: center!important
     }
+}
+
+.scroller {
+    position: relative;
+    overflow: hidden;
+    padding: 0px 15px 15px 0px !important;
+}
+
+p {
+    margin-bottom: 2rem;
 }

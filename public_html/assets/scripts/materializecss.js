@@ -70,8 +70,10 @@ $(window).on("load", function() {
 
 function Materializecss() {
 
-
-    $('.modal').modal();
+    $('[maxlength]').each(function() {
+        var maxlength = $(this).attr('maxlength');
+        $(this).attr('data-length', maxlength).characterCounter();
+    });
 
     defaultMenuCollapse(),
         $(function() {
@@ -104,11 +106,10 @@ function Materializecss() {
             $(".select").formSelect();
 
             var n = document.getElementById("indeterminate-checkbox");
-
+            $(".slider").slider({
+                height: '600px'
+            })
             null !== n && (n.indeterminate = !0),
-                $(".slider").slider({
-                    full_width: !0
-                }),
                 $(".dropdown-trigger").dropdown(),
                 $(".dropdown-button").dropdown({
                     inDuration: 300,

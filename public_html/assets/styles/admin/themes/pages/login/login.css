@@ -37,9 +37,7 @@
     position: relative;
 }
 
-#login-page .card-panel #btn-back {
-    position: absolute;
-    left: 0px;
+#btn-back {
     display: none;
 }
 
@@ -48,6 +46,23 @@
     overflow: hidden;
     height: 150px;
     width: 100%;
+}
+
+#boas-vindas {
+    text-overflow: ellipsis;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 20px
+}
+
+.form_login .vertical-align {
+    align-items: center;
+    display: flex;
+}
+
+.form_login .vertical-align button {
+    margin-right: 15px;
 }
 
 #frm-login .form #input-login,
@@ -59,6 +74,11 @@
 #frm-login #input-pass,
 #frm-login #relembrar_senha {
     display: none;
+}
+
+#frm-login #relembrar_login,
+#frm-login #relembrar_senha {
+    /* margin: 10px 0; */
 }
 
 

@@ -15,7 +15,11 @@ var Form = {
 
                 e.preventDefault();
 
-                Form.send();
+                Form.textarea();
+
+                setTimeout(function() {
+                    Form.send();
+                }, 100);
 
             });
 
@@ -32,9 +36,8 @@ var Form = {
             // Acender botões se valores dos checkboxes forem verdadeiros
             // Ex.: botões de bloqueio
             Form.toggleButtons();
-        });
 
-        Form.image_upload();
+        });
 
         // Exibir formulários nas páginas e omitir as dataTables
         $('.add-button').on('click', function() {
@@ -42,11 +45,21 @@ var Form = {
             Http.goTo(url);
         });
 
+        Form.image_upload();
+
     },
 
     reset: () => {
 
         element.find('[type=reset]').click();
+        element.find('.ql-container').find('.ql-editor').empty().parents('.ql-container').parent().find('[type=hidden]').val('');
+        element.find('.media').find('.redefinir').click().hide();
+        element.find('.media').find('.btn_add_new_image').show();
+        element.find('[autofocus]').focus();
+
+        // Form.image_upload();
+
+        element.resetForm();
 
     },
 
@@ -57,7 +70,7 @@ var Form = {
         var method = element.attr('method');
         var action = element.attr('action');
 
-        element.ajaxSubmit({
+        $(element).ajaxSubmit({
 
             method: method, // method
             action: action, // url
@@ -65,6 +78,11 @@ var Form = {
             beforeSend: (e) => {
 
                 Form.__button__(label, true);
+                Form.clearErrors();
+
+                $('.editor').each(function() {
+                    $(this).next(':input:hidden[name="' + $(this).attr('id') + '"]').val($(this).find('.ql-editor').html());
+                })
 
             },
 
@@ -87,8 +105,7 @@ var Form = {
                             }
 
                             if (element.find('[name=_method]').val() === 'post') {
-                                element.resetForm();
-                                element.find('[autofocus]').focus();
+                                Form.reset();
                             }
 
                             Form.refreshPage($response.type);
@@ -125,6 +142,8 @@ var Form = {
             },
 
             error: (error) => {
+
+                Form.showErrors(error.statusText, error.status);
                 Form.__button__(label, false);
             }
 
@@ -132,18 +151,37 @@ var Form = {
 
     },
 
+    textarea: () => {
+
+        var items = ['.editor', '.editor--full', '.editor--basic'];
+
+        $(items.toString()).each(function() {
+
+            $(this).parent('.input-field').find('input[type="hidden"]').val($(this).find('.ql-editor').html());
+
+        })
+
+    },
+
     login: (response, label) => {
+
+        var $titulo = null;
 
         if (response.status === 200) {
 
-            Form.__avancar__();
+            if (typeof response.user !== 'undefined') {
+                var $titulo_inicial = $('#boas-vindas').text();
+                var $titulo = 'Olá, ' + response.data.user + '! Seja bem-vindo!'
+            }
+
+            Form.__avancar__($titulo);
 
             element.find(':button:submit').removeClass('next');
 
             setTimeout(function() {
                 document.getElementById('senha').focus();
                 Form.__button__(label, false);
-                Form.__voltar__();
+                Form.__voltar__($titulo_inicial);
             }, 270);
 
         } else {
@@ -192,11 +230,8 @@ var Form = {
 
         }
 
-        if (type === 'refresh') {
-            setTimeout(function() {
-                location.reload();
-            }, 2000);
-        }
+        element.find('.media').find('.redefinir').hide();
+        element.find('.media').find('.btn_add_new_image').show();
 
     },
 
@@ -279,48 +314,65 @@ var Form = {
 
     image_upload: () => {
 
-        $('.redefinir_foto').click();
+        $(element).find('.media').each(function() {
 
-        // Exibir a imagem em uploads de imagens 
-        $(element).find('.image_view').on('click', function(e) {
+            var placeholder = '';
+            var img;
 
-            img = $(this).parents('.media').find('img');
+            // Input alterar imagem/arquivo
+            placeholder = $(this).find('[data-placeholder]');
 
-            $(this).next(':input:file').click();
+            // utilizar o texto que está no placeholder da div
+            placeholder.html(placeholder.data('placeholder'));
 
-        });
+            // Exibir a imagem em uploads de imagens 
+            $(this).find('.image_alt').on('click', function(e) {
 
-        var img;
+                img = $(this).parents('.media').find('img');
 
-        // Redefinir foto do perfil de usuário
-        $(element).find('.redefinir_foto').on('click', function() {
+                $(this).parents('.media').find(':input:file').click();
 
-            $(this).parents('.media').find('.original').show();
-            $(this).parents('.media').find('.temp').parent().remove();
-            $('.image_view').next(':input:file').val('');
-            $(this).parents('form').find('.redefinir_foto').parent().hide();
+            });
 
-        });
+            // Redefinir foto do perfil de usuário
+            $(this).find('.redefinir').on('click', function() {
 
-        // Alterar imagem ao selecionar uma no upload de arquivos
-        $(element).find('.image_view').next(':input:file').on('change', function() {
+                $(this).parents('.media').find('.original').show();
+                $(this).parents('.media').find('.temp').parent().remove();
+                $(this).parents('.media').find('.redefinir').hide();
+                $(this).parents('.media').find('.btn_add_new_image').show();
+                $(this).parents('.media').find('[data-placeholder]').html(placeholder.data('placeholder'));
+                $('.image_view').parents().find(':input:file').val('');
 
-            $(this).parents('.media').find('.original').hide();
-            $(this).parents('.media').find('.temp').parent().remove();
+            });
 
-            if ($(this).val()) {
+            // Alterar imagem ao selecionar uma no upload de arquivos
+            $(this).find('.image_alt').parents('.media').find(':input:file').on('change', function() {
 
-                var src = window.URL.createObjectURL(document.querySelector('[name="imagem"]').files[0]);
-                var img = $('<img/>', {
-                    'src': src,
-                    'class': 'materialboxed temp z-depth-4 circle',
-                });
+                var classes = $(this).parents('.image_alt').attr('class');
+                var self = $(this).attr('id');
 
-                $(this).parents('.media').find('.img-perfil').append(img);
-                $(this).parents('form').find('.redefinir_foto').parent().show();
-                $(img).materialbox();
+                $(this).parents('.media').find('.original').hide();
+                $(this).parents('.media').find('.temp').parent().remove();
 
-            }
+                if ($(this).val()) {
+
+                    var src = window.URL.createObjectURL(document.querySelector('#' + self).files[0]);
+                    var img = $('<img/>', {
+                        'src': src,
+                        'class': 'materialboxed temp',
+                    });
+
+                    $(this).parents('.media').find('[data-placeholder]').html($(this).val());
+
+                    $(this).parents('.media').find('.image_view').append(img);
+                    $(this).parents('.media').find('.redefinir').show();
+                    $(this).parents('.media').find('.btn_add_new_image').hide();
+                    $(img).materialbox();
+
+                }
+
+            });
 
         });
 
@@ -390,54 +442,79 @@ var Form = {
 
     },
 
-    showErrors: (field) => {
+    showErrors: ($field, $status) => {
 
         Form.clearErrors();
         M.Toast.dismissAll();
 
-        Object.keys(field).forEach((item) => {
+        if (typeof $field === 'object') {
+            Object.keys($field).forEach((item) => {
 
-            var label = $('[name="' + item + '"]');
-            var div = $('<div/>', { 'class': 'error' });
-            var icon = $('<i/>', { class: 'material-icons sufix' }).html('error');
+                var label = $('[name="' + item + '"]');
+                var div = $('<div/>', { 'class': 'error' });
+                var icon = $('<i/>', { class: 'material-icons sufix' }).html('error');
 
-            $(label).parents('.input-field').addClass('error')
-                .find('.error').remove();
+                $(label).parents('.input-field').addClass('error')
+                    .find('.error').remove();
 
-            $(label).parents('.input-field').addClass('error')
-                .append(div.append(icon, field[item]));
+                $(label).parents('.input-field').addClass('error')
+                    .append(div.append(icon, $field[item]));
 
-        })
+            })
+            $(':valid').focus();
+        } else {
 
-        // $('input:not(:valid)')[0].focus();
+            var status = (typeof $status !== 'undefined' ? $status + ' ' : null);
+
+            setTimeout(function() {
+
+                M.toast({
+                    html: 'Erro: ' + status + ' - ' + $field + '<button class="btn btn-floating btn-small transparent toast-action waves-effect waves-light"><i class="material-icons">close</i></button>',
+                    timeRemaining: 1000,
+                    displayLength: 3000,
+                });
+
+                $('.toast-action').on('click', function(e) {
+                    e.preventDefault();
+                    M.Toast.dismissAll();
+                });
+
+            }, 200);
+        }
 
     },
 
     clearErrors: () => {
 
-        element.find('.input-field').removeClass('error').find('.error').remove();
+        $(element).find('.input-field').removeClass('error').find('.error').remove();
+        M.Toast.dismissAll();
 
     },
 
     showMessage: ($text, $status, $title = 'teste') => {
 
         Form.clearErrors();
-        M.Toast.dismissAll();
 
         if (typeof $text !== 'object') {
 
             var classes = 'z-depth-2';
 
-            M.toast({
-                classes: classes + ' ' + (typeof $status !== null ? $status : ''),
-                html: $text + '<button class="btn btn-floating btn-small transparent toast-action waves-effect waves-light"><i class="material-icons">close</i></button>',
-                displayLength: 10000
-            });
+            setTimeout(function() {
 
-            $('.toast-action').on('click', function(e) {
-                e.preventDefault();
-                M.Toast.dismissAll();
-            });
+                M.toast({
+                    classes: classes + ' ' + (typeof $status !== null ? $status : ''),
+                    html: $text + '<button class="btn btn-floating btn-small transparent toast-action waves-effect waves-light"><i class="material-icons">close</i></button>',
+                    timeRemaining: 1000,
+                    displayLength: 3000,
+                    panning: false
+                });
+
+                $('.toast-action').on('click', function(e) {
+                    e.preventDefault();
+                    M.Toast.dismissAll();
+                });
+
+            }, 200);
 
         }
 
@@ -457,28 +534,30 @@ var Form = {
 
     },
 
-    __avancar__: () => {
+    __avancar__: ($titulo) => {
 
         Form.clearErrors();
+        $('#boas-vindas').html($titulo);
 
-        $('#input-login').removeClass('animated fast fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated fadeOutLeft')
+        $('#input-login').removeClass('animated faster fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated faster fadeOutLeft')
             .find('[name="login"]').attr('disabled', true);
-        $('#input-pass').removeClass('animated fast fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated fadeInRight').show()
+        $('#input-pass').removeClass('animated faster fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated faster fadeInRight').show()
             .find('[name="senha"]').attr('disabled', false);
         $('#relembrar_login').hide();
         $('#btn-back,#relembrar_senha').css('display', 'flex').attr('disabled', false);
 
     },
 
-    __voltar__: () => {
+    __voltar__: ($titulo) => {
 
         Form.clearErrors();
 
         $('#btn-back').on('click', function() {
-            $('#input-pass').removeClass('animated fast fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated fadeOutRight')
+            $('#boas-vindas').html($titulo);
+            $('#input-pass').removeClass('animated faster fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated faster fadeOutRight')
                 .find('[name="senha"]').val('').attr('disabled', true);
             $('#btn-back,#relembrar_senha').css('display', 'flex').attr('disabled', true).hide();
-            $('#input-login').removeClass('animated fast fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated fadeInLeft').show()
+            $('#input-login').removeClass('animated faster fadeOutLeft fadeInLeft fadeInRight fadeOutRight').addClass('animated faster fadeInLeft').show()
                 .find('[name="login"]').attr('disabled', false);
             $('#relembrar_login').show();
             document.getElementById('login').focus();

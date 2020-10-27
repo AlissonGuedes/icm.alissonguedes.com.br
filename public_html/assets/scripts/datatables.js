@@ -134,11 +134,13 @@ $.extend($.fn.dataTableExt.oPagination, {
 
 var checkAll = () => {
 
+    $('.dataTables_wrapper').find('thead,tbody').find(':input:checkbox:checked').prop('checked', false).change();
+
     // Ativar preenchimento de checkboxes nas tabelas
     $('body').find('.dataTables_wrapper').each(function() {
 
         var status = 0;
-        var btn_status = $(this).parents('.panel').find(':button[name="status"]');
+        var btn_status = $(this).parents('.panel').find(':button.update_resources, :button.update');
 
         var checked;
         var dataTables_wrapper = $(this);
@@ -164,29 +166,26 @@ var checkAll = () => {
 
         dataTables_wrapper.find(':input:checkbox').on('change', function() {
 
-            var checkeds = $(this).parents('.dataTables_wrapper').find('tbody')
-                .find(':input:checkbox:checked').length;
-            var countCheckbox = $(this).parents('.dataTables_wrapper').find('tbody')
-                .find(':input:checkbox').length;
-            var checkAll = $(this).parents('.dataTables_wrapper').find('thead')
-                .find(':input:checkbox').attr('id');
+            var checkeds = $(this).parents('.dataTables_wrapper').find('tbody').find(':input:checkbox:checked').length;
+            var countCheckbox = $(this).parents('.dataTables_wrapper').find('tbody').find(':input:checkbox').length;
+            var checkAll = $(this).parents('.dataTables_wrapper').find('thead').find(':input:checkbox').attr('id');
             var indeterminateCheckbox = document.getElementById(checkAll);
-
             var selecteds_label = checkeds > 1 ? checkeds + ' itens selecionados' : checkeds + ' item selecionado';
-
             var chkStatusLength = $(this).parents('.dataTables_wrapper').find('tbody').find(':checkbox[data-status="0"]:checked').length;
 
-            if (chkStatusLength === 0) {
-                btn_status.attr('data-tooltip', 'Bloquear').val(0).find('i').text('lock');
-            } else {
-                btn_status.attr('data-tooltip', 'Desbloquear').val(1).find('i').text('lock_open');
-            }
+            btn_status.each(function() {
+                if (chkStatusLength === 0)
+                    $(this).attr('data-tooltip', $(this).data('on')).val(0).find('i').text($(this).find('i').data('on'));
+                else
+                    $(this).attr('data-tooltip', $(this).data('off')).val(1).find('i').text($(this).find('i').data('off'));
+            });
 
             if (checkeds > 0) {
 
                 checked = true;
-                $(this).parents('.panel').find('.hide-buttons').css('display', 'flex').find('.selecteds-label').html(selecteds_label);
-                $(this).parents('.panel').find('.show-buttons, .input-field').hide();
+                $(this).parents('.panel').find('.hide-buttons').css('display', 'flex')
+                    .find('button').attr('disabled', false).parents('.panel').find('.selecteds-label').html(selecteds_label);
+                $(this).parents('.panel').find('.show-buttons, .panel-header .input-field').hide();
 
                 if (checkeds === countCheckbox) {
                     indeterminateCheckbox.indeterminate = false;
@@ -198,8 +197,9 @@ var checkAll = () => {
 
             } else {
 
-                $(this).parents('.panel').find('.hide-buttons').hide().find('.selecteds-label').empty();
-                $(this).parents('.panel').find('.show-buttons, .input-field').css('display', 'flex');
+                $(this).parents('.panel').find('.hide-buttons').hide()
+                    .find('button').attr('disabled', true).parents('.panel').find('.selecteds-label').empty();
+                $(this).parents('.panel').find('.show-buttons, .panel-header .input-field').css('display', 'flex');
                 indeterminateCheckbox.indeterminate = false;
                 checked = false;
 
@@ -214,171 +214,192 @@ var checkAll = () => {
 
 }
 
-function buttonActions() {
+function deleteItem(item) {
 
-    $('body').find('table.datatable').each(function() {
+}
+
+
+function buttonActions() {
+ 
+    // Excluir dados em massa no datatables
+    $('body').find('.panel').find(':button.excluir').bind('click', function() {
 
         var self = $(this);
+        var id = [];
+        var type = null;
 
-        // Excluir dados em massa no datatables
-        $(this).parents('.panel').find('.excluir').bind('click', function() {
-
-            var id = [];
-
-            self.find('tbody :checkbox:checked').each(function() {
+        if ( self.parents('.panel').find('.dataTables_wrapper').length > 0 ) {
+            self.parents('.panel').find('.dataTables_wrapper').find('tbody :checkbox:checked').each(function() {
                 id.push($(this).val());
             });
+        } else {
+            id.push(self.val());
+            type = 'back';
+        }
 
-            Http.post($(this).data('link'), {
-                'datatype': 'json',
-                'data': {
-                    'id': id,
-                    '_method': 'delete'
-                }
-            }, ($response) => {
+        Http.post($(this).data('link'), {
+            'datatype': 'json',
+            'data': {
+                'id': id,
+                'type': type,
+                '_method': 'delete'
+            }
+        }, ($response) => {
 
-                var table = $('table.datatable').DataTable();
-                table.destroy();
-                DataTable();
-
-                Form.showMessage($response.message, $response.status);
-
-            });
+            if ( type === 'back' )
+                Http.goTo((typeof $response.url !== 'undefined' ? $response.url : $(this).data('link')), { 'message' : $response.message, 'status' : $response.status });
+            else {
+    
+                if (typeof $response.message !== 'undefined')
+                    Form.showMessage($response.message, $response.status);
+    
+                DataTable(true);
+    
+            }
 
         });
 
-        // Altera recursos individualmente
-        $(this).parents('.panel').find('.update_resources').bind('click', function() {
+    });
 
-            var id = [];
-            var url = $(this).data('link');
-            var status = $(this).val();
+    var i = 0;
 
-            self.find('tbody :checkbox:checked').each(function() {
+    // Altera recursos individualmente
+    $('body').find('.panel').find(':button.update_resources, :button.update').bind('click', function() {
+
+        var self = $(this);
+        var id = [];
+        var type = null;
+        var status = $(this).val();
+
+        if ( self.parents('.panel').find('.dataTables_wrapper').length > 0 ) {
+            self.parents('.panel').find('.dataTables_wrapper').find('tbody :checkbox:checked').each(function() {
                 id.push($(this).val());
             });
+        } else {
+            id.push(self.val());
+            type = 'back';
+        }
 
-            var $data = {
-                'datatype': 'json',
-                'data': {
-                    'id': id,
-                    'value': status,
-                    '_method': 'patch'
-                }
-            };
+        Http.post($(this).data('link'), {
+            'datatype': 'json',
+            'data': {
+                'id': id,
+                'type': type,
+                'value': status,
+                '_method': 'patch'
+            }
+        }, ($response) => {
 
-            Http.post(url, $data, (response) => {
-
-                var table = $('table.datatable').DataTable();
-                table.destroy();
-                DataTable();
-
-                if (typeof response.message !== 'undefined')
-                    Form.showMessage(response.message);
-
-            });
+            if ( type === 'back' )
+                Http.goTo($response.url, { 'message' : $response.message, 'status' : $response.status });
+            else {
+    
+                if (typeof $response.message !== 'undefined')
+                    Form.showMessage($response.message, $response.status);
+    
+                DataTable(true);
+    
+            }
 
         });
-
 
     });
 
 }
 
-function DataTable(callback) {
+function DataTable(refresh) {
 
-    $('body').find('table.datatable').each(function() {
+    var table = $('table.datatable');
 
-        var table = $(this);
-        var sortable = [];
-
-        table.find('th').each(function(i) {
-            if ($(this).hasClass('sortable'))
-                sortable.push($(this).index());
-        });
-
-        var _self = table.DataTable({
-            'displayLength': 10,
-            'oLanguage': {
-                'sEmptyTable': '',
-                'sInfo': '_START_ - _END_ de _TOTAL_',
-                'sInfoEmpty': 'Nenhum registro encontrado',
-                'sInfoFiltered': '', //' _MAX_',
-                'sInfoPostFix': '',
-                'sInfoThousands': '.',
-                'sLengthMenu': '_MENU_',
-                'sLengthMenu': '',
-                'sLoadingRecords': 'Carregando...',
-                'sProcessing': '<i></i> &nbsp; Carregando...',
-                'sZeroRecords': 'Nenhum registro encontrado',
-                'sSearch': (typeof table.data('label') !== 'undefined' && table.data('label') ? table.data('label') : ''),
-                'sSearchPlaceholder': (typeof table.data('placeholder') !== 'undefined' && table.data('placeholder') ? table.data('placeholder') : null),
-                'oPaginate': {
-                    'sNext': 'Próximo',
-                    'sPrevious': 'Anterior',
-                    'sFirst': 'Primeiro',
-                    'sLast': 'Último'
-                },
-                'oAria': {
-                    'sSortAscending': ': Ordenar colunas de forma ascendente',
-                    'sSortDescending': ': Ordenar colunas de forma descendente'
-                }
+    var _self = table.DataTable({
+        'retrieve': true,
+        'displayLength': 50,
+        'oLanguage': {
+            'sEmptyTable': '',
+            'sInfo': '_START_ - _END_ de _TOTAL_',
+            'sInfoEmpty': '',
+            'sInfoFiltered': '',
+            'sInfoPostFix': '',
+            'sInfoThousands': '.',
+            'sLengthMenu': '_MENU_',
+            'sLengthMenu': '',
+            'sLoadingRecords': 'Carregando...',
+            'sProcessing': '<div class="progress">\
+    				<div class="indeterminate"></div>\
+    			</div>',
+            'sZeroRecords': 'Nenhum registro encontrado',
+            'sSearch': (typeof table.data('label') !== 'undefined' && table.data('label') ? table.data('label') : ''),
+            'sSearchPlaceholder': (typeof table.data('placeholder') !== 'undefined' && table.data('placeholder') ? table.data('placeholder') : null),
+            'oPaginate': {
+                'sNext': 'próximo',
+                'sPrevious': 'anterior',
+                'sFirst': 'primeiro',
+                'sLast': 'último'
             },
-            'scrollCollapse': true,
-            'sPaginationType': 'materialize',
-            'scrollY': $(window).height() - 380 + "px",
-            'scrollCollapse': !0,
-            'scrollX': !1,
-            'paging': !0,
-            'responsive': !0,
-            'fnInitComplete': function() {
+            'oAria': {
+                'sSortAscending': ': Ordenar colunas de forma ascendente',
+                'sSortDescending': ': Ordenar colunas de forma descendente'
+            }
+        },
+        'scrollCollapse': true,
+        'sPaginationType': 'materialize',
+        'scrollY': $(window).height() - 1 + "px",
+        'scrollCollapse': !1,
+        'scrollX': !1,
+        'paging': !0,
+        'responsive': true,
+        'fnInitComplete': function() {
 
-                // new PerfectScrollbar(".dataTables_scrollBody");
-                resizeBody();
+            if ($('body').find('table').length)
+                new PerfectScrollbar(".dataTables_scrollBody");
 
-            },
-            'fnDrawCallback': function(e, f) {
+        },
+        'fnDrawCallback': function() {
 
-                // new PerfectScrollbar(".dataTables_scrollBody");
+            checkAll();
+            resizeBody();
+            Request.addEvent();
 
-                checkAll();
-                $('.dataTables_wrapper').find('thead,tbody').find(':input:checkbox:checked').prop('checked', false).change();
-
-                if (typeof callback === 'function') {
-                    return callback(this);
-                }
-
-            },
-            'fnRowCallback': function(row, data, index) {
-
-                $(row).addClass('animated fadeInUp delay-' + index + 's');
-
-                $(row).find('td').on('click', function(e) {
-                    var index = $($(this).parents('.dataTables_wrapper').find($('thead th'))[$(this).index()]);
-                    if (!index.hasClass('disabled')) {
-                        var id = $(data[0]).find(':checkbox').val();
-                        var url = $(this).parents('.dataTables_wrapper').find('table').attr('data-link') + '/' + id;
-                        Http.goTo(url);
-                    }
+            $('.dropdown-trigger').each(function() {
+                $(this).dropdown({
+                    'alignment': typeof $(this).data('alignment') !== 'undefined' ? $(this).data('alignment') : null,
+                    'constrainWidth': true
                 });
+            });
 
-                $(row).find('.blocked').parent().parent().addClass('blocked');
+        },
+        'fnRowCallback': function(row, data, index) {
 
-            },
-            'serverSide': true,
-            'processing': false,
-            'ajax': {
-                type: 'get',
-                url: typeof $(this).data('link') !== 'undefined' ? $(this).data('link') : window.location.href,
-            },
-            'order': [],
-            'columnDefs': [
-                { 'visible': true, 'targets': sortable },
-                { 'orderable': false, 'targets': sortable },
-            ],
-        });
+            // $(row).addClass('animated fadeInUpBig slow delay-' + index + '');
 
-        var search = table.parents('.panel').find('.panel-header').find('.dataTable_search');
+            $(row).find('td').on('click', function(e) {
+                var index = $($(this).parents('.dataTables_wrapper').find($('thead th'))[$(this).index()]);
+                if (!index.hasClass('disabled')) {
+                    var id = $(data[0]).find(':checkbox').val();
+                    var url = $(this).parents('.dataTables_wrapper').find('table').attr('data-link') + '/' + id;
+                    Http.goTo(url);
+                }
+            });
+
+            $(row).find('.blocked').parent().parent().addClass('blocked');
+
+        },
+        'serverSide': true,
+        'processing': true,
+        'ajax': {
+            type: 'get',
+            url: typeof $(this).data('link') !== 'undefined' ? $(this).data('link') : window.location.href,
+        },
+        'order': [],
+        // 'columnDefs': [
+        //     { 'visible': true, 'targets': sortable },
+        //     { 'orderable': false, 'targets': sortable },
+        // ],
+    });
+
+    var search = table.parents('.panel').find('.dataTable_search');
+
+    if (search.length) {
 
         search.bind('keyup paste', delay(function() {
             _self.search(this.value).draw();
@@ -388,7 +409,11 @@ function DataTable(callback) {
             _self.search(search.val()).draw();
         }
 
-    });
+    }
+
+    if (refresh) {
+        _self.draw()
+    }
 
 }
 

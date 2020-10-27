@@ -1,51 +1,55 @@
 <body class="theme-default vertical-layout">
 
-	<?php
-	$page = basename($_SERVER['REQUEST_URI']);
-	$css_page_file =  base_path() . 'styles/admin/themes/pages' . DS . $page . '.css';
-	?>
+	<div id="body">
 
-	<?php if ( file_exists( $_SERVER['DOCUMENT_ROOT'] . $css_page_file) ) : ?>
-	<link rel="stylesheet" media="screen" href="<?= $css_page_file; ?>">
-	<?php endif; ?>
+		<?php
+		$page = basename($_SERVER['REQUEST_URI']);
+		$css_page_file =  base_path() . 'styles/admin/themes/pages' . DS . $page . '.css';
+		?>
 
-	<?php if ( ! isset($_SESSION[USERDATA]['passthru']) ) : ?>
-	<link rel="stylesheet" media="screen" href="<?= base_path(); ?>styles/admin/themes/pages/login/login.css">
-	<?php endif; ?>
+		<?php if ( file_exists( $_SERVER['DOCUMENT_ROOT'] . $css_page_file) ) : ?>
+		<link rel="stylesheet" media="screen" href="<?= $css_page_file; ?>">
+		<?php endif; ?>
 
-	<?= $header; ?>
+		<?php if ( ! isset($_SESSION[USERDATA]['passthru']) ) : ?>
+		<link rel="stylesheet" media="screen" href="<?= base_path(); ?>styles/admin/themes/pages/login/login.css">
+		<?php endif; ?>
 
-	<?= $sidebar; ?>
+		<?= $header; ?>
 
-	<!-- BEGIN #main -->
-	<div id="main" class="<?php configuracoes('status', 'tb_acl_usuario') === '1' ? 'main-full' : null; ?>">
+		<?= $sidebar; ?>
 
-		<!-- BEGIN container -->
-		<div class="container">
+		<!-- BEGIN #main -->
+		<div id="main" class="<?php configuracoes('status', 'tb_acl_usuario') === '1' ? 'main-full' : null; ?>">
 
-			<!-- BEGIN row -->
-			<div class="row">
+			<!-- BEGIN container -->
+			<div class="">
 
-				<!-- BEGIN col.s12 -->
-				<div class="col s12">
+				<!-- BEGIN row -->
+				<div class="">
 
-					<?= $view; ?>
+					<!-- BEGIN col.s12 -->
+					<div class="">
+
+						<?= $view; ?>
+
+					</div>
+					<!-- END col.s12 -->
 
 				</div>
-				<!-- END col.s12 -->
+				<!-- END row -->
 
 			</div>
-			<!-- END row -->
+			<!-- END container -->
+
+			<div class="content-overlay"></div>
 
 		</div>
-		<!-- END container -->
+		<!-- END #main -->
 
-		<div class="content-overlay"></div>
+		<?= $footer; ?>
 
 	</div>
-	<!-- END #main -->
-
-	<?= $footer; ?>
 
 	<?php require('includes/scripts.phtml'); ?>
 

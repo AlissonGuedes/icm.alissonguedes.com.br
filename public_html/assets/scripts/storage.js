@@ -51,6 +51,7 @@ var Storage = {
                 } else {
 
                     Storage.removeSession('token');
+                    Http.goTo(BASE_URL + 'login');
 
                 }
 
